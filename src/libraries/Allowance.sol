@@ -12,6 +12,7 @@ library Allowance {
     /// @dev If the inputted expiration is 0, the stored expiration is set to block.timestamp
     function updateAll(
         IAllowanceTransfer.PackedAllowance storage allowed,
+	uint256 tokenId,
         uint160 amount,
         uint48 expiration,
         uint48 nonce
@@ -25,7 +26,8 @@ library Allowance {
 
         uint256 word = pack(amount, storedExpiration, storedNonce);
         assembly {
-            sstore(allowed.slot, word)
+            sstore(allowed.slot, tokenId)
+            sstore(add(0x1, allowed.slot), word)
         }
     }
 
